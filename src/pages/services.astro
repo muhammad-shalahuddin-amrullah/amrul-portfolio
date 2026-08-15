@@ -1,0 +1,211 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const services = [
+    {
+        title: "Digital Invitation",
+        desc: "Undangan digital berbasis website yang modern dan responsif.",
+        url: "https://undangan.amrul.my.id",
+        icon: "fas fa-envelope-open-text",
+        tags: ["Web Dev", "Hosting"]
+    },
+    {
+        title: "Remote Server Setup",
+        desc: "Konfigurasi VPS Linux, web server (Nginx), dan Docker.",
+        url: "#", 
+        icon: "fas fa-server",
+        tags: ["Linux", "Docker"]
+    },
+    {
+        title: "MikroTik Optimization",
+        desc: "Audit jaringan, optimasi CPU router, dan manajemen bandwidth.",
+        url: "#", 
+        icon: "fas fa-network-wired",
+        tags: ["RouterOS", "Tuning"]
+    },
+    {
+        title: "Custom UI/UX Design",
+        desc: "Perancangan antarmuka website yang estetis dan intuitif.",
+        url: "#", 
+        icon: "fas fa-pen-nib",
+        tags: ["Figma", "UI/UX"]
+    },
+    {
+        title: "SEO Optimization",
+        desc: "Optimasi mesin pencari agar website Anda tampil di halaman pertama.",
+        url: "#", 
+        icon: "fas fa-search",
+        tags: ["Google", "Analytics"]
+    },
+    {
+        title: "IT Support & Consult",
+        desc: "Konsultasi teknis dan penyelesaian masalah hardware/software.",
+        url: "#", 
+        icon: "fas fa-laptop-code",
+        tags: ["Support", "Troubleshoot"]
+    }
+];
+---
+
+<BaseLayout 
+    title="Specialized Services | S. Amrullah"
+    description="Katalog jasa IT Support, Web Development, dan Undangan Digital."
+>
+    <!-- MENGHANCURKAN LOCK SCROLL DARI HALAMAN UTAMA -->
+    <style is:global>
+        body, html { overflow-y: auto !important; height: auto !important; }
+    </style>
+
+    <div id="split-view">
+        
+        <!-- KIRI: JUDUL & DESKRIPSI (TETAP DIAM / STICKY) -->
+        <div class="left-content">
+            <a href="/" class="btn-minimal"><i class="fas fa-arrow-left"></i> cd ../home</a>
+            
+            <div class="title-wrapper">
+                <h1>Specialized<br><span class="serif">Services</span></h1>
+                <p class="desc">Solusi teknis dan kreatif yang saya sediakan untuk membantu kebutuhan personal maupun bisnis Anda. Straight to the point, reliable, and secure.</p>
+            </div>
+            
+            <div class="status-badge" style="margin-bottom: 0;">
+                <span class="status-dot"></span> Available for Hire
+            </div>
+        </div>
+
+        <!-- KANAN: LIST JASA (GRID 2 KOLOM & BISA DI-SCROLL) -->
+        <div class="right-visual">
+            <div class="services-list">
+                {services.map((service) => (
+                    <a href={service.url} class="service-card" target={service.url.startsWith('http') ? '_blank' : '_self'}>
+                        <div class="card-header">
+                            <div class="icon-box"><i class={service.icon}></i></div>
+                            <h3>{service.title}</h3>
+                        </div>
+                        
+                        <p>{service.desc}</p>
+                        
+                        <div class="tech-stack">
+                            {service.tags.map(tag => (<span>{tag}</span>))}
+                        </div>
+
+                        <div class="visit-link">
+                            {service.url.startsWith('http') ? 'curl -I visit' : 'sudo execute'} 
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                ))}
+            </div>
+        </div>
+        
+    </div>
+</BaseLayout>
+
+<style>
+    /* === BASE SPLIT SCREEN (Menggunakan Align-items flex-start agar sticky bekerja) === */
+    #split-view { 
+        display: flex; 
+        width: 100%; 
+        min-height: 100vh; /* Bukan height mati, agar bisa scroll */
+        background: var(--bg-main); 
+        align-items: flex-start; 
+    }
+    
+    /* === KIRI (STICKY / MENGAMBANG DIAM) === */
+    .left-content { 
+        flex: 1; /* Mengambil 50% layar */
+        display: flex; flex-direction: column; justify-content: space-between;
+        padding: 60px 8%; 
+        position: sticky; /* INI KUNCI AGAR DIA DIAM */
+        top: 0; 
+        height: 100vh; /* Tingginya pas selayar */
+        border-right: 1px solid var(--border-color);
+        background: var(--bg-main);
+    }
+    
+    .btn-minimal {
+        width: max-content;
+        background: transparent; color: var(--text-muted); border: 1px solid var(--border-color);
+        padding: 10px 20px; border-radius: 50px; font-size: 13px; font-weight: 600; font-family: var(--font-mono);
+        text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s;
+    }
+    .btn-minimal:hover { color: var(--text-main); border-color: var(--text-main); background: var(--bg-alt); }
+    
+    .title-wrapper h1 { font-family: var(--font-sans); font-size: clamp(3rem, 5vw, 5rem); font-weight: 900; line-height: 1; letter-spacing: -0.04em; margin-bottom: 20px;}
+    .title-wrapper h1 .serif { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: var(--text-muted);}
+    .title-wrapper p.desc { font-size: 1.1rem; color: var(--text-muted); line-height: 1.6; max-width: 500px; }
+    
+    .status-badge { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; font-weight: 700; padding: 8px 16px; border: 1px solid var(--border-color); border-radius: 50px; width: max-content; margin-bottom: 30px; color: var(--text-main); }
+    .status-dot { width: 8px; height: 8px; background-color: var(--accent-green); border-radius: 50%; box-shadow: 0 0 8px var(--accent-green);}
+
+    /* === KANAN (SCROLLABLE AREA BEBAS) === */
+    .right-visual {
+        flex: 1; /* Mengambil 50% layar */
+        background-color: var(--bg-alt); 
+        padding: 60px 5%;
+        min-height: 100vh;
+    }
+
+    /* KUNCI GRID 2 KOLOM */
+    .services-list { 
+        display: grid; 
+        grid-template-columns: repeat(2, 1fr); /* 2 KOLOM KE SAMPING */
+        gap: 20px; 
+    }
+
+    /* === CARD STYLE === */
+    .service-card {
+        background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 12px;
+        padding: 25px; text-decoration: none; color: var(--text-main); transition: all 0.3s ease;
+        display: flex; flex-direction: column;
+    }
+    .service-card:hover { border-color: var(--text-main); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+
+    .card-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+    .icon-box { 
+        width: 40px; height: 40px; background: var(--bg-alt); border-radius: 10px; 
+        display: flex; align-items: center; justify-content: center; font-size: 16px; 
+        color: var(--text-main); border: 1px solid var(--border-color); transition: 0.3s;
+    }
+    .service-card:hover .icon-box { background: var(--accent-green); border-color: var(--accent-green); }
+    .card-header h3 { 
+        font-family: var(--font-sans); 
+        font-size: 1.25rem; 
+        font-weight: 800; 
+        letter-spacing: -0.03em; /* Ini kunci desain premium: jarak antar huruf dirapatkan */
+        color: var(--text-main);
+        line-height: 1.2;
+    }
+
+    /* Deskripsi: Rapi, terbaca jelas, selaras dengan deskripsi Hero */
+    .service-card p { 
+        font-family: var(--font-sans);
+        font-size: 0.95rem; 
+        font-weight: 400;
+        color: var(--text-muted); 
+        line-height: 1.6; 
+        margin-bottom: 20px; 
+        flex-grow: 1;
+    }
+
+    .tech-stack { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); }
+    .tech-stack span { background: var(--bg-alt); padding: 4px 10px; border-radius: 50px; border: 1px solid var(--border-color); transition: 0.3s;}
+    .service-card:hover .tech-stack span { border-color: var(--text-main); color: var(--text-main); }
+
+    .visit-link { font-family: var(--font-mono); font-size: 11px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; justify-content: space-between; border-top: 1px dashed var(--border-color); padding-top: 15px; transition: 0.3s;}
+    .service-card:hover .visit-link { color: var(--text-main); }
+    .visit-link i { transform: rotate(-45deg); transition: 0.3s; }
+    .service-card:hover .visit-link i { transform: rotate(0deg); color: var(--accent-green); font-size: 14px;}
+
+    /* === RESPONSIVE UNTUK HP === */
+    @media (max-width: 1024px) {
+        #split-view { flex-direction: column; height: auto; }
+        .left-content { position: relative; height: auto; border-right: none; padding: 40px 5%; }
+        .title-wrapper { margin-top: 40px; margin-bottom: 40px; }
+        .right-visual { padding: 40px 5%; border-top: 1px solid var(--border-color);}
+    }
+    
+    /* Jika di HP layar sempit, grid turun jadi 1 kolom */
+    @media (max-width: 650px) {
+        .services-list { grid-template-columns: 1fr; }
+    }
+</style>

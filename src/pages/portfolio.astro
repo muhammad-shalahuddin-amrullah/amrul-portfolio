@@ -1,0 +1,167 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { getEntry } from 'astro:content';
+
+// AMBIL DATA DARI 1 FILE MD TADI
+const projectDoc = await getEntry('database', 'projects');
+const journeyDoc = await getEntry('database', 'journeys');
+
+// Filter (selected=yes), Urutkan (Tinggi ke Rendah), Batasi (Maks 4)
+const featuredProjects = projectDoc.data.items
+    .filter((p: any) => p.selected === "yes")
+    .sort((a: any, b: any) => b.order - a.order)
+    .slice(0, 4);
+
+// Urutkan (Tinggi ke Rendah), Batasi (Maks 4)
+const featuredExperiences = journeyDoc.data.items
+    .sort((a: any, b: any) => b.order - a.order)
+    .slice(0, 3);
+---
+
+<BaseLayout 
+    title="Selected Works & Experience | Muhammad Shalahuddin Amrullah"
+    description="Explore my projects in UI/UX Design, Front-end Web Development, and IT Support."
+>
+    <div class="container">
+        <!-- Berikan isPortfolio={true} agar linknya menjadi anchor (#) -->
+        <Navbar activeMenu="" isPortfolio={true} />
+
+        <header class="hero">
+            <h1>I build tools & systems<br>that <span class="serif">actually work.</span></h1>
+            <p>Delivering high-quality digital solutions through human-centered UI/UX Design, Front-end Web Development, and reliable IT Support maintenance.</p>
+            <a href="#projects" class="btn-primary">Explore My Work <i class="fas fa-arrow-down"></i></a>
+        </header>
+    </div>
+
+    <!-- Marquee Skills -->
+    <div class="marquee">
+        <div class="marquee-inner">
+            <span>IT Support</span><span>UI/UX Designer</span><span>Education</span><span>SEO Specialist</span><span>Event Organizing</span>
+            <span>IT Support</span><span>UI/UX Designer</span><span>Education</span><span>SEO Specialist</span><span>Event Organizing</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Projects Section -->
+        <section id="projects">
+            <div class="section-header">
+                <h2>Selected <span class="serif">Works.</span></h2>
+            </div>
+            
+            <div class="projects-grid">
+                {featuredProjects.map((project: any) => (
+                    <a href={project.link || "#"} target="_blank" class="project-card">
+                        <div class="project-thumb">
+                            <img src={project.image} alt={project.title}>
+                        </div>
+                        <div class="project-tags">{project.tags}</div>
+                        <h3 class="project-title">{project.title}</h3>
+                        <p class="project-desc">{project.desc}</p>
+                    </a>
+                ))}
+            </div>
+            
+            <!-- Tombol persis HTML asli -->
+            <div style="text-align: center; margin-top: 50px;">
+                <a href="/projects" class="btn-minimal" style="padding: 15px 30px; font-size: 14px;">
+                    View All Archive Projects <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience">
+            <div class="section-header" style="margin-top: 150px;">
+                <h2>Professional <span class="serif">Journey.</span></h2>
+            </div>
+
+            <div class="exp-list">
+                {featuredExperiences.map((exp: any) => (
+                    <div class="exp-item">
+                        <div class="exp-role">
+                            <h3>{exp.role}</h3>
+                            <span>{exp.company}</span>
+                        </div>
+                        <div class="exp-desc">
+                            <!-- LOGIKA LIST: Cek apakah desc adalah array -->
+                            {Array.isArray(exp.desc) ? (
+                                <ul class="custom-list">
+                                    {exp.desc.map((item: string) => (
+                                        <li>{item}</li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>{exp.desc}</p>
+                            )}
+                        </div>
+                    </div> <!-- Penutup ini yang tadi tertinggal -->
+                ))}
+            </div>
+            
+            <!-- Tombol persis HTML asli -->
+            <div style="text-align: center; margin-top: 50px;">
+                <a href="/journey" class="btn-minimal" style="padding: 15px 30px; font-size: 14px;">
+                    View Full Journey & Education <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </section>
+
+        <Footer isPortfolio={true} />
+    </div>
+</BaseLayout>
+
+<style>
+    .hero { padding: 100px 0 80px; text-align: left; }
+    .hero h1 { font-family: var(--font-sans); font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 900; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 30px; color: var(--text-main);}
+    .hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; line-height: 1.6; margin-bottom: 40px; }
+    .hero .serif { font-family: var(--font-serif); font-style: italic; color: var(--text-muted); font-weight: 400;}
+    
+    .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: var(--accent-green); color: #000; padding: 16px 32px; border-radius: 50px; font-size: 14px; font-weight: 700; font-family: var(--font-sans); text-transform: uppercase; text-decoration: none; transition: 0.3s; }
+    .btn-primary:hover { background: #000; color: var(--accent-green); }
+
+    .marquee { width: 100%; overflow: hidden; background: var(--bg-alt); padding: 20px 0; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
+    .marquee-inner { display: flex; width: max-content; animation: marquee 20s linear infinite; }
+    .marquee span { font-family: var(--font-mono); font-size: 1rem; text-transform: uppercase; margin: 0 40px; color: var(--text-main); font-weight: 700; display: flex; align-items: center; gap: 40px;}
+    .marquee span::after { content: ''; display: block; width: 8px; height: 8px; background: var(--accent-green); border-radius: 50%; }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+
+    .section-header { margin: 100px 0 50px; }
+    .section-header h2 { font-family: var(--font-sans); font-size: 3rem; font-weight: 900; letter-spacing: -0.03em; }
+    .section-header .serif { font-family: var(--font-serif); font-style: italic; color: var(--text-muted); font-weight: 400;}
+
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; }
+    .project-card { display: block; text-decoration: none; color: var(--text-main); transition: 0.3s; }
+    .project-thumb { width: 100%; aspect-ratio: 4/3; border-radius: 12px; overflow: hidden; margin-bottom: 20px; background: var(--bg-alt); border: 1px solid var(--border-color); }
+    .project-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+    .project-card:hover .project-thumb img { transform: scale(1.05); }
+    .project-tags { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase;}
+    .project-title { font-family: var(--font-sans); font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; }
+    .project-desc { font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; }
+
+    .exp-list { border-top: 1px solid var(--border-color); }
+    .exp-item { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; padding: 40px 0; border-bottom: 1px solid var(--border-color); transition: background 0.3s; }
+    .exp-item:hover { background-color: var(--bg-alt); padding-left: 20px; padding-right: 20px; margin: 0 -20px; border-radius: 8px;}
+    .exp-role { flex: 1; min-width: 250px; }
+    .exp-role h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 5px; }
+    .exp-role span { font-family: var(--font-serif); font-style: italic; color: var(--text-muted); font-size: 1.1rem; }
+    .exp-desc { flex: 2; min-width: 300px; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
+    /* CSS Khusus Poin-poin Deskripsi */
+    .custom-list {
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        list-style-type: disc; /* Memberi tanda titik (bullet) */
+    }
+    .custom-list li {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+        .exp-item { flex-direction: column; gap: 15px; }
+    }
+</style>

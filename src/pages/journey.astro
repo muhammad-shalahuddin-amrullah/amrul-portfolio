@@ -1,0 +1,259 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+// Memanggil komponen Navbar dan Footer Anda
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout 
+    title="Professional Journey & Experience | S. Amrullah"
+    description="Explore my career history, educational background, and professional experience."
+>
+    <div class="journey-page">
+        <div class="container">
+            
+            <!-- MEMUNCULKAN NAVBAR -->
+            <Navbar />
+
+            <!-- HEADER -->
+            <header class="page-header">
+                <h1>Professional <span class="serif">Journey.</span></h1>
+                <p class="desc-header">A detailed timeline of my career history, roles, and educational background.</p>
+            </header>
+
+            <!-- FILTERS -->
+            <div class="filters" id="filter-container">
+                <button class="filter-btn active" data-type="All">All Timeline</button>
+                <button class="filter-btn" data-type="Work">Work Experience</button>
+                <button class="filter-btn" data-type="Freelance">Freelance & Volunteer</button>
+                <button class="filter-btn" data-type="Education">Education</button>
+            </div>
+
+            <!-- CONTAINER LIST (Akan diisi oleh Javascript) -->
+            <div class="journey-list" id="journey-container">
+                <!-- Data akan muncul di sini -->
+            </div>
+
+            <!-- PAGINATION -->
+            <div class="pagination" id="pagination-container">
+                <!-- Tombol angka akan muncul di sini -->
+            </div>
+
+        </div>
+
+        <!-- MEMUNCULKAN FOOTER (Di luar container agar full-width jika diperlukan) -->
+        <Footer />
+        
+    </div>
+</BaseLayout>
+
+<!-- CSS UNTUK LAYOUT UTAMA -->
+<style>
+    .journey-page { padding-bottom: 0; min-height: 100vh; background: var(--bg-main); }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 5%; }
+
+    .page-header { padding: 80px 0 40px; text-align: left; border-bottom: 1px solid var(--border-color); margin-bottom: 40px; }
+    .page-header h1 { font-family: var(--font-sans); font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 900; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 20px;}
+    .page-header .serif { font-family: var(--font-serif); font-style: italic; color: var(--text-muted); font-weight: 400;}
+    .desc-header { font-size: 1.1rem; color: var(--text-muted); max-width: 600px; line-height: 1.6; }
+
+    .filters { display: flex; gap: 10px; margin-bottom: 40px; flex-wrap: wrap; }
+    .filter-btn {
+        background: var(--bg-alt); border: 1px solid var(--border-color); color: var(--text-muted);
+        padding: 8px 16px; border-radius: 50px; font-family: var(--font-mono); font-size: 12px;
+        cursor: pointer; transition: 0.3s; text-transform: uppercase; font-weight: 600;
+    }
+    .filter-btn.active, .filter-btn:hover { background: var(--text-main); color: var(--bg-main); border-color: var(--text-main); }
+
+    .journey-list { min-height: 500px; }
+    .pagination { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 60px 0 40px; }
+</style>
+
+<!-- CSS GLOBAL (PENTING! Agar elemen yang dibuat Javascript tidak hancur) -->
+<style is:global>
+    .journey-item { display: flex; flex-wrap: wrap; gap: 30px; padding: 40px 0; border-bottom: 1px solid var(--border-color); animation: fadeIn 0.4s ease-out; transition: background 0.3s;}
+    .journey-item:hover { background-color: var(--bg-alt); padding-left: 20px; padding-right: 20px; margin: 0 -20px; border-radius: 8px;}
+    
+    .journey-meta { flex: 1; min-width: 200px; }
+    .journey-date { font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 10px; padding: 5px 12px; background: #e0e0e0; border-radius: 50px; width: max-content;}
+    .journey-type { font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;}
+    
+    .journey-content { flex: 3; min-width: 300px; }
+    .journey-role { font-size: 1.6rem; font-weight: 800; margin-bottom: 5px; color: var(--text-main); font-family: var(--font-sans); letter-spacing: -0.02em;}
+    .journey-company { font-family: var(--font-serif); font-style: italic; color: var(--text-muted); font-size: 1.2rem; display: block; margin-bottom: 15px;}
+    
+    /* Support untuk Paragraf biasa ATAU List titik (<ul>) */
+    .journey-desc { color: var(--text-muted); font-size: 1rem; line-height: 1.6; font-family: var(--font-sans); font-weight: 400;}
+    .custom-list { padding-left: 20px; color: var(--text-muted); font-size: 1rem; line-height: 1.6; font-family: var(--font-sans); }
+    .custom-list li { margin-bottom: 8px; }
+
+    .page-btn {
+        width: 40px; height: 40px; border-radius: 50%; background: var(--bg-alt); border: 1px solid var(--border-color);
+        display: flex; justify-content: center; align-items: center; font-family: var(--font-mono); font-weight: 700;
+        cursor: pointer; transition: 0.3s; color: var(--text-main); font-size: 14px;
+    }
+    .page-btn:hover:not(:disabled) { background: #e0e0e0; }
+    .page-btn.active { background: var(--accent-green); border-color: var(--accent-green); color: #000; }
+    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+</style>
+
+<!-- JAVASCRIPT -->
+<script is:inline>
+    const allJourney = [
+        { 
+            type: "Work", 
+            date: "June 2025 - Present", 
+            role: "IT Support | Infrastructure & Network", 
+            company: "PT. Warnatama Cemerlang", 
+            desc: [
+                "Minimizing network downtime and optimizing latency (ping) through infrastructure monitoring.",
+                "Successfully implemented FTTH and LAN infrastructure for stable high-speed connectivity.",
+                "Streamlined business reporting processes and improved data accuracy."
+            ] 
+        },
+        { 
+            type: "Work", 
+            date: "Jan 2024 - Present", 
+            role: "Product Specialist", 
+            company: "PT Multi Medika Mahadata", 
+            desc: "Conceptualized and designed products from inception to final implementation. Conducted thorough evaluations to maintain high-quality standards." 
+        },
+        { 
+            type: "Work", 
+            date: "Mar 2023 - Dec 2023", 
+            role: "UI/UX Designer", 
+            company: "10am Studio", 
+            desc: "Drafted comprehensive Style Guides and created Low-Fidelity & High-Fidelity Wireframes for various digital products." 
+        },
+        { 
+            type: "Work", 
+            date: "Jul 2022 - Feb 2023", 
+            role: "Teacher Assistant", 
+            company: "SMKN 2 Singosari", 
+            desc: "Educated students on networking technology and devices, guiding them through essential skills for their competency exams." 
+        },
+        { 
+            type: "Freelance", 
+            date: "2023 - Present", 
+            role: "Freelance Web Developer", 
+            company: "Self-Employed", 
+            desc: "Developing custom landing pages, portfolios, and internal dashboards for local businesses and individual clients using modern frameworks." 
+        },
+        { 
+            type: "Education", 
+            date: "2020 - 2023", 
+            role: "Computer & Network Engineering", 
+            company: "SMKN 2 Singosari", 
+            desc: "Graduated with honors. Actively participated in IT workshops, network setup competitions, and school event organizing committees." 
+        }
+    ];
+
+    let currentType = 'All';
+    let currentPage = 1;
+    const itemsPerPage = 4;
+
+    function getFilteredJourney() {
+        if (currentType === 'All') return allJourney;
+        return allJourney.filter(item => item.type === currentType);
+    }
+
+    function renderJourney() {
+        const container = document.getElementById('journey-container');
+        if(!container) return; 
+        
+        container.innerHTML = ''; 
+
+        const filteredJourney = getFilteredJourney();
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const journeyToRender = filteredJourney.slice(startIndex, endIndex);
+
+        if(journeyToRender.length === 0) {
+            container.innerHTML = '<p style="color: var(--text-muted); padding-top:20px;">No records found in this category.</p>';
+            renderPagination(0);
+            return;
+        }
+
+        journeyToRender.forEach(item => {
+            let descHtml = '';
+            if (Array.isArray(item.desc)) {
+                const listItems = item.desc.map(d => `<li>${d}</li>`).join('');
+                descHtml = `<ul class="custom-list">${listItems}</ul>`;
+            } else {
+                descHtml = `<p class="journey-desc">${item.desc}</p>`;
+            }
+
+            const html = `
+                <div class="journey-item">
+                    <div class="journey-meta">
+                        <span class="journey-date">${item.date}</span>
+                        <span class="journey-type"><i class="fas fa-hashtag"></i> ${item.type}</span>
+                    </div>
+                    <div class="journey-content">
+                        <h3 class="journey-role">${item.role}</h3>
+                        <span class="journey-company">${item.company}</span>
+                        ${descHtml}
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        });
+
+        renderPagination(filteredJourney.length);
+    }
+
+    function renderPagination(totalItems) {
+        const paginationContainer = document.getElementById('pagination-container');
+        if(!paginationContainer) return;
+        
+        paginationContainer.innerHTML = ''; 
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        if (totalPages <= 1) return; 
+
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'page-btn';
+        prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.onclick = () => { currentPage--; renderJourney(); scrollToTop(); };
+        paginationContainer.appendChild(prevBtn);
+
+        for (let i = 1; i <= totalPages; i++) {
+            const numBtn = document.createElement('button');
+            numBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+            numBtn.innerText = i;
+            numBtn.onclick = () => { currentPage = i; renderJourney(); scrollToTop(); };
+            paginationContainer.appendChild(numBtn);
+        }
+
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'page-btn';
+        nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.onclick = () => { currentPage++; renderJourney(); scrollToTop(); };
+        paginationContainer.appendChild(nextBtn);
+    }
+
+    function filterExperience(type) {
+        currentType = type;
+        currentPage = 1; 
+        
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if(btn.dataset.type === type) {
+                btn.classList.add('active');
+            }
+        });
+        renderJourney();
+    }
+
+    function scrollToTop() {
+        document.querySelector('.page-header').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => filterExperience(e.target.dataset.type));
+        });
+        renderJourney();
+    });
+</script>

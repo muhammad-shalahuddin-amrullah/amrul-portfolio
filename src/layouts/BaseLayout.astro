@@ -1,0 +1,265 @@
+---
+const { title, description } = Astro.props;
+const isHomePage = Astro.url.pathname === '/';
+const siteUrl = "https://amrul.my.id";
+const currentUrl = Astro.url.href;
+const ogImage = "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200"; 
+const siteName = "Amrul Portfolio";
+const fullTitle = `${title} | Amrul (M. Shalahuddin Amrullah)`;
+---
+<!DOCTYPE html>
+<html lang="en" prefix="og: https://ogp.me/ns#">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="theme-color" content="#c4ff00">
+    <title>{fullTitle}</title>
+    <meta name="description" content={description}>
+    <meta name="keywords" content="Amrul, Muhammad Shalahuddin Amrullah, IT Support Surabaya, Freelance IT Support, UI/UX Designer Indonesia, Web Developer Surabaya, Jasa Pembuatan Website, SEO Specialist, Framer Developer">
+    <meta name="author" content="Muhammad Shalahuddin Amrullah">
+    <meta name="creator" content="Muhammad Shalahuddin Amrullah">
+    <meta name="publisher" content="Muhammad Shalahuddin Amrullah">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="canonical" href={currentUrl} />
+    <link rel="alternate" hreflang="en" href={currentUrl} />
+    <link rel="alternate" hreflang="x-default" href={siteUrl} />
+
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:url" content={currentUrl}>
+    <meta property="og:title" content={fullTitle}>
+    <meta property="og:description" content={description}>
+    <meta property="og:image" content={ogImage}>
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content={siteName}>
+
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- <meta name="twitter:site" content="@amrul">  -->
+    <!-- <meta name="twitter:creator" content="@amrul"> -->
+    <meta name="twitter:url" content={currentUrl}>
+    <meta name="twitter:title" content={fullTitle}>
+    <meta name="twitter:description" content={description}>
+    <meta name="twitter:image" content={ogImage}>
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Amrul Portfolio">
+    <meta name="application-name" content="Amrul Portfolio">
+    <link rel="icon" type="image/svg+xml" href="/logo.svg">
+    <link rel="apple-touch-icon" href="/logo.svg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+    <script type="application/ld+json">
+        [
+            {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "name": "Amrul Portfolio",
+                "alternateName": ["Muhammad Shalahuddin Amrullah", "Amrul Tech & Design"],
+                "url": "https://amrul.my.id",
+                "description": "Freelance IT Support, UI/UX Designer, and Web Developer based in Surabaya."
+            },
+            {
+                "@context": "https://schema.org",
+                "@type": "Person",
+                "name": "Muhammad Shalahuddin Amrullah",
+                "alternateName": "Amrul",
+                "url": "https://amrul.my.id",
+                "image": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800",
+                "jobTitle": "IT Support & UI/UX Designer",
+                "worksFor": {
+                    "@type": "Organization",
+                    "name": "Freelance"
+                },
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Surabaya",
+                    "addressRegion": "East Java",
+                    "addressCountry": "ID"
+                },
+                "sameAs": [
+                    "https://www.linkedin.com/in/amrullah200533428050/",
+                    "https://www.instagram.com/a.mrllh__/",
+                    "https://amrul.framer.media/",
+                    "https://dribbble.com/Muhammad-Shalahudin-Amrullah"
+                ]
+            }
+        ]
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800;900&family=Playfair+Display:ital,wght@0,400;1,400;1,600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+    {!isHomePage && (
+        <script is:inline src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+    )}
+
+    <style is:global>
+
+        html.lenis, html.lenis body { height: auto; width: 100%; }
+        .lenis.lenis-smooth { scroll-behavior: auto !important; }
+        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+        .lenis.lenis-stopped { overflow: hidden; }
+        .lenis.lenis-scrolling iframe { pointer-events: none; }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-main: #ffffff;
+            --bg-alt: #f4f5f7;
+            --text-main: #111111;
+            --text-muted: #666666;
+            --border-color: #e5e7eb;
+            --accent-green: #c4ff00;
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        body {
+            font-family: var(--font-sans); background-color: var(--bg-main); color: var(--text-main);
+            -webkit-font-smoothing: antialiased; overflow-x: hidden;
+            animation: fadeIn 0.6s ease-out; scroll-behavior: smooth;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
+
+        .btn-minimal {
+            background: var(--bg-alt) !important; 
+            color: var(--text-muted) !important; 
+            border: 1px solid var(--border-color) !important;
+            padding: 8px 18px; 
+            border-radius: 50px !important; 
+            font-size: 13px; 
+            font-weight: 500; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            text-decoration: none !important; /* Memaksa agar teks tidak digarisbawahi */
+            font-family: var(--font-sans);
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .btn-minimal:hover { 
+            background: var(--bg-main) !important; 
+            color: var(--text-main) !important; 
+            border-color: var(--text-main) !important; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transform: translateY(-1px);
+        }
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: var(--accent-green);
+            color: #000;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: var(--font-sans);
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(196, 255, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px) scale(0.9);
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+        .back-to-top:hover {
+            background: #000;
+            color: var(--accent-green);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <slot />
+        <button class="back-to-top" id="backToTopBtn" title="Back to Top">
+            <i class="fas fa-arrow-up"></i> Top
+        </button>
+        <script is:inline>
+            let originalTitle = document.title;
+            document.addEventListener("visibilitychange", () => {
+                if (document.hidden) {
+                    document.title = "👋 Come back!";
+                } else {
+                    document.title = originalTitle;
+                }
+            });
+
+        </script>
+        {!isHomePage && (
+        <script is:inline>
+            if (typeof Lenis !== 'undefined') {
+                const lenis = new Lenis({
+                    duration: 1.5, // "Berat" scroll
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
+                    smooth: true,
+                    smoothTouch: false, 
+                });
+
+                function raf(time) {
+                    lenis.raf(time);
+                    requestAnimationFrame(raf);
+                }
+                requestAnimationFrame(raf);
+
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const targetId = this.getAttribute('href');
+                        
+                        if(targetId === '#') return;
+                        
+                        const targetElement = document.querySelector(targetId);
+                        
+                        if (targetElement) {
+                            lenis.scrollTo(targetElement, {
+                                duration: 1.8,
+                                easing: (t) => 1 - Math.pow(1 - t, 4) 
+                            });
+                        }
+                    });
+                });
+
+                const topBtn = document.getElementById('backToTopBtn');
+                
+                lenis.on('scroll', (e) => {
+                    if (e.scroll > 300) {
+                        topBtn.classList.add('visible');
+                    } else {
+                        topBtn.classList.remove('visible');
+                    }
+                });
+
+                topBtn.addEventListener('click', () => {
+                    lenis.scrollTo(0, { 
+                        duration: 1.5, 
+                        easing: (t) => 1 - Math.pow(1 - t, 4) 
+                    });
+                });
+            }
+        </script>
+    )}
+</body>
+</html>
