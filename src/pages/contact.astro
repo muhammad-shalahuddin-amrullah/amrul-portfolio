@@ -91,4 +91,24 @@ import Navbar from '../components/Navbar.astro';
     .footer-social { display: flex; gap: 20px; justify-content: center;}
     .footer-social a { width: 60px; height: 60px; border-radius: 50%; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--text-main); text-decoration: none; font-size: 1.5rem; transition: 0.3s;}
     .footer-social a:hover { background: var(--accent-green); border-color: var(--accent-green); transform: translateY(-3px);}
+    /* === TAMBAHKAN KODE INI DI STYLE CONTACT.ASTRO === */
+    @media (max-width: 550px) {
+        .email-group {
+            display: flex;
+            flex-direction: column; 
+            border-radius: 20px; 
+            padding: 10px;
+            width: 100%;
+        }
+        .email-link { 
+            font-size: 1rem; 
+            padding: 15px 10px; 
+            word-break: break-all; /* Memaksa email turun ke bawah jika layar terlalu kecil */
+        } 
+        .copy-btn { 
+            width: 100%; 
+            padding: 16px; 
+            justify-content: center;
+        } 
+    }
 </style>

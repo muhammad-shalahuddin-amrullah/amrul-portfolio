@@ -13,7 +13,7 @@ import Footer from '../components/Footer.astro';
         <div class="container">
             
             <!-- MEMUNCULKAN NAVBAR -->
-            <Navbar />
+            <Navbar activeMenu="journey" />
 
             <!-- HEADER -->
             <header class="page-header">
@@ -50,7 +50,7 @@ import Footer from '../components/Footer.astro';
 <!-- CSS UNTUK LAYOUT UTAMA -->
 <style>
     .journey-page { padding-bottom: 0; min-height: 100vh; background: var(--bg-main); }
-    .container { max-width: 1000px; margin: 0 auto; padding: 0 5%; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
 
     .page-header { padding: 80px 0 40px; text-align: left; border-bottom: 1px solid var(--border-color); margin-bottom: 40px; }
     .page-header h1 { font-family: var(--font-sans); font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 900; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 20px;}

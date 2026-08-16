@@ -108,6 +108,43 @@ const fullTitle = `${title} | Amrul (M. Shalahuddin Amrullah)`;
         .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
         .lenis.lenis-stopped { overflow: hidden; }
         .lenis.lenis-scrolling iframe { pointer-events: none; }
+        body { position: relative; } /* Penting agar doodle mengikuti body */
+        
+        .doodle-canvas {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; /* Anti nge-klik */
+            z-index: 0; /* Taruh paling belakang */
+            overflow: hidden;
+        }
+
+        .doodle-item {
+            position: absolute;
+            /* Animasi melayang natural */
+            animation: float-random infinite alternate ease-in-out;
+        }
+
+        .doodle-shape {
+            width: 45px; height: 45px;
+        }
+
+        /* Warna Abu-abu samar */
+        .text-muted {
+            color: var(--text-muted);
+            opacity: 0.15; /* Transparan agar tidak mengganggu bacaan */
+        }
+
+        /* Warna Hijau Neon khusus untuk bintang */
+        .text-green {
+            color: var(--accent-green);
+            opacity: 0.6; /* Lebih terang dikit */
+        }
+
+        /* Keyframes: Menggabungkan gerakan ke atas/samping + putaran pelan */
+        @keyframes float-random {
+            0% { transform: translate(0px, 0px) rotate(0deg) scale(var(--tw-scale-x, 1)); }
+            100% { transform: translate(15px, 20px) rotate(15deg) scale(var(--tw-scale-x, 1)); }
+        }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
@@ -193,6 +230,7 @@ const fullTitle = `${title} | Amrul (M. Shalahuddin Amrullah)`;
     </style>
 </head>
 <body>
+    <div id="doodle-canvas" class="doodle-canvas" aria-hidden="true"></div>
     <slot />
         <button class="back-to-top" id="backToTopBtn" title="Back to Top">
             <i class="fas fa-arrow-up"></i> Top
@@ -260,6 +298,65 @@ const fullTitle = `${title} | Amrul (M. Shalahuddin Amrullah)`;
                 });
             }
         </script>
+        <script is:inline>
+        function generateDoodles() {
+            const canvas = document.getElementById('doodle-canvas');
+            if(!canvas) return;
+            canvas.innerHTML = ''; // Bersihkan dulu tiap kali load
+
+            // Kumpulan aset Tech-Doodles (SVG)
+            const svgs = [
+                // Bintang (Akan kita beri warna hijau)
+                `<svg viewBox="0 0 24 24" fill="none" class="doodle-shape text-green"><path d="M12 1L14.5 9.5L23 12L14.5 14.5L12 23L9.5 14.5L1 12L9.5 9.5L12 1Z" fill="currentColor"/></svg>`,
+                // Spiral / Squiggle
+                `<svg viewBox="0 0 100 40" fill="none" class="doodle-shape text-muted"><path d="M0 20C10 -10 20 50 30 20C40 -10 50 50 60 20C70 -10 80 50 90 20" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>`,
+                // Tanda Plus / Crosshair
+                `<svg viewBox="0 0 24 24" fill="none" class="doodle-shape text-muted"><path d="M12 2V22M2 12H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+                // Lingkaran Putus-putus
+                `<svg viewBox="0 0 100 100" fill="none" class="doodle-shape text-muted"><circle cx="50" cy="50" r="48" stroke="currentColor" stroke-width="2" stroke-dasharray="8 8"/></svg>`,
+                // Grid Titik-titik (3x3 Dots)
+                `<svg viewBox="0 0 24 24" fill="currentColor" class="doodle-shape text-muted"><circle cx="4" cy="4" r="2"/><circle cx="12" cy="4" r="2"/><circle cx="20" cy="4" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="20" cy="12" r="2"/><circle cx="4" cy="20" r="2"/><circle cx="12" cy="20" r="2"/><circle cx="20" cy="20" r="2"/></svg>`
+            ];
+
+            // Ambil total tinggi dan lebar halaman (agar nyebar sampai bawah)
+            const pageHeight = Math.max(document.documentElement.scrollHeight, window.innerHeight);
+            const pageWidth = document.documentElement.clientWidth;
+
+            // Hitung idealnya berapa doodle (1 doodle per 350px agar tidak keramaian)
+            const numDoodles = Math.min(Math.floor(pageHeight / 350), 12); 
+
+            for(let i = 0; i < numDoodles; i++) {
+                const svgStr = svgs[Math.floor(Math.random() * svgs.length)];
+                const div = document.createElement('div');
+                div.className = 'doodle-item';
+                div.innerHTML = svgStr;
+
+                // Posisi Acak (Pixel) - Dijauhkan sedikit dari tepi agar tidak memotong layar
+                const top = Math.random() * (pageHeight - 100); 
+                const left = 20 + Math.random() * (pageWidth - 80); 
+
+                div.style.top = `${top}px`;
+                div.style.left = `${left}px`;
+
+                // Animasi Acak (Biar gerakan tiap ornamen tidak sama)
+                const delay = Math.random() * 5;
+                const duration = 10 + Math.random() * 10; // 10s - 20s
+                div.style.animationDelay = `-${delay}s`;
+                div.style.animationDuration = `${duration}s`;
+
+                // Ukuran Acak
+                const scale = 0.6 + Math.random() * 0.8; // 0.6x sampai 1.4x
+                div.style.transform = `scale(${scale})`;
+
+                canvas.appendChild(div);
+            }
+        }
+
+        // Jalankan script saat halaman di-load
+        document.addEventListener('DOMContentLoaded', generateDoodles);
+        // Jalankan ulang sejenak setelah load untuk memastikan tinggi halaman sudah terbaca penuh
+        setTimeout(generateDoodles, 300);
+    </script>
     )}
 </body>
 </html>

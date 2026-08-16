@@ -1,7 +1,12 @@
 ---
-const { isPortfolio } = Astro.props;
+// src/components/Footer.astro
+
+// Kita tangkap variabel isPortfolio. Jika tidak ada, default-nya false.
+const { isPortfolio = false } = Astro.props;
 ---
-<footer id="contact" class={`footer ${isPortfolio ? 'no-border' : ''}`}>
+
+<!-- TRIKNYA DI SINI: Jika isPortfolio true, class-nya 'in-container'. Jika false, class-nya 'full-width' -->
+<footer id="contact" class={`footer ${isPortfolio ? 'in-container' : 'full-width'}`}>
     <p class="project-tags" style="margin-bottom: 10px;">AVAILABLE FOR FREELANCE</p>
     <h2>Let's Work <span class="serif">Together.</span></h2>
     
@@ -17,10 +22,78 @@ const { isPortfolio } = Astro.props;
         <a href="https://dribbble.com/Muhammad-Shalahudin-Amrullah" target="_blank"><i class="fab fa-dribbble"></i></a>
         <a href="https://www.linkedin.com/in/amrullah200533428050/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
     </div>
-    <p style="font-family:var(--font-mono); font-size: 10px; color:var(--text-muted); text-transform: uppercase; margin-top:40px;">© 2025 Muhammad Shalahuddin Amrullah. All Rights Reserved.</p>
+
+    <p style="font-family:var(--font-mono); font-size: 10px; color:var(--text-muted); text-transform: uppercase; margin-top:40px;">
+        © 2025 Muhammad Shalahuddin Amrullah. All Rights Reserved.
+    </p>
 </footer>
 
+<style>
+    .footer { padding: 80px 0 60px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 60px;}
+    
+    /* === SOLUSI FINAL KANAN-KIRI === */
+    /* Jika footer ada di luar container (Projects & Journey), beri padding 5% */
+    .footer.full-width {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+    /* Jika footer di dalam container (Portfolio), biarkan padding 0 karena container sudah punya padding */
+    .footer.in-container {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .footer h2 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900; margin-bottom: 30px; letter-spacing: -0.04em; font-family: var(--font-sans);}
+    .footer .serif { font-family: var(--font-serif); font-style: italic; color: var(--text-muted); font-weight: 400;}
+    .project-tags { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); text-transform: uppercase;}
+
+    /* KOTAK EMAIL & COPY */
+    .email-group {
+        display: inline-flex;
+        align-items: center;
+        background: var(--bg-alt);
+        border: 1px solid var(--border-color);
+        border-radius: 50px;
+        padding: 6px;
+        margin-top: 10px;
+        transition: all 0.3s ease;
+        max-width: 100%;
+    }
+    .email-group:hover { border-color: var(--text-muted); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+
+    .email-link { padding: 12px 24px; color: var(--text-main); text-decoration: none; font-weight: 600; font-size: 1.1rem; font-family: var(--font-sans);}
+    
+    .copy-btn {
+        background: var(--accent-green); color: #000; border: none; padding: 14px 28px;
+        border-radius: 50px; font-weight: 700; cursor: pointer; transition: all 0.3s ease;
+        display: flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--font-sans); font-size: 14px;
+    }
+    .copy-btn:hover, .copy-btn.copied { background: #000; color: var(--accent-green); }
+
+    /* === RESPONSIVE FOOTER UNTUK MOBILE === */
+    @media (max-width: 550px) {
+        .email-group {
+            flex-direction: column; 
+            border-radius: 20px; 
+            padding: 10px;
+            width: 100%;
+        }
+        .email-link { font-size: 1rem; padding: 15px 10px; word-break: break-all; } 
+        .copy-btn { width: 100%; padding: 16px; justify-content: center; } 
+    }
+
+    /* SOCIAL MEDIA */
+    .footer-social { margin-top: 50px; display: flex; justify-content: center; gap: 20px; }
+    .footer-social a {
+        width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--border-color);
+        display: flex; align-items: center; justify-content: center; color: var(--text-main);
+        text-decoration: none; font-size: 1.2rem; transition: all 0.3s ease;
+    }
+    .footer-social a:hover { background: var(--accent-green); border-color: var(--accent-green); }
+</style>
+
 <script is:inline>
+    // Script Copy Email
     function copyEmail(buttonElement, email) {
         navigator.clipboard.writeText(email).then(() => {
             const originalHTML = '<i class="far fa-copy"></i> Copy';
@@ -35,24 +108,3 @@ const { isPortfolio } = Astro.props;
         });
     }
 </script>
-
-<style>
-    /* Default Footer (Untuk halaman Projects & Journey) */
-    .footer { padding: 60px 0; text-align: center; border-top: 1px solid var(--border-color); margin-top: 60px;}
-    
-    /* Footer Khusus Portfolio (Tanpa Garis & Jarak Lebih Jauh seperti HTML asli) */
-    .footer.no-border { border-top: none; padding-top: 120px; margin-top: 0; }
-
-    .footer h2 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900; margin-bottom: 30px; letter-spacing: -0.04em; font-family: var(--font-sans);}
-    .footer .serif { font-family: var(--font-serif); font-style: italic; color: var(--text-muted); font-weight: 400;}
-    .project-tags { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); text-transform: uppercase;}
-    .footer-social { margin-top: 50px; display: flex; justify-content: center; gap: 20px; }
-    .footer-social a { width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--text-main); text-decoration: none; font-size: 1.2rem; transition: 0.3s;}
-    .footer-social a:hover { background: var(--accent-green); border-color: var(--accent-green); }
-
-    .email-group { display: inline-flex; align-items: center; background: var(--bg-alt); border: 1px solid var(--border-color); border-radius: 50px; padding: 6px; margin-top: 10px; transition: all 0.3s ease; }
-    .email-group:hover { border-color: var(--text-muted); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-    .email-link { padding: 12px 24px; color: var(--text-main); text-decoration: none; font-weight: 600; font-size: 1.1rem; font-family: var(--font-sans); }
-    .copy-btn { background: var(--accent-green); color: #000; border: none; padding: 14px 28px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; font-family: var(--font-sans); font-size: 14px; }
-    .copy-btn:hover, .copy-btn.copied { background: #000; color: var(--accent-green); }
-</style>

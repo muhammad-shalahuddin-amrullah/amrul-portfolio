@@ -10,62 +10,155 @@ const isMainPage = currentPath === '' || currentPath === '/portfolio';
         </div>
     </a>
 
-     <div class="nav-links">
-        {!isMainPage && (
-            <a href="/portfolio" class={activeMenu === 'home' ? 'active' : ''}>Home</a>
-        )}
+    <!-- TOMBOL HAMBURGER (HANYA MUNCUL DI MOBILE) -->
+    <button class="mobile-toggle" id="mobile-toggle-btn" aria-label="Toggle Menu">
+        <i class="fas fa-bars"></i>
+    </button>
 
-        <a href={isMainPage ? "#projects" : "/projects"} class={activeMenu === 'projects' ? 'active' : ''}>
-            {isMainPage ? "Projects" : "All Projects"}
-        </a>
-        
-        <a href={isMainPage ? "#experience" : "/journey"} class={activeMenu === 'journey' ? 'active' : ''}>
-            {isMainPage ? "Experience" : "All Experience"}
-        </a>
-        
-        <a href={isMainPage ? "#contact" : "/contact"} class={activeMenu === 'contact' ? 'active' : ''}>
-            {isMainPage ? "Contact" : "Get in Touch"}
+    <!-- WRAPPER: Di Desktop akan "menghilang", di Mobile jadi Dropdown -->
+    <div class="nav-wrapper" id="nav-wrapper">
+        <div class="nav-links">
+            {!isMainPage && (
+                <a href="/portfolio" class={activeMenu === 'home' ? 'active' : ''}>Home</a>
+            )}
+
+            <a href={isMainPage ? "#projects" : "/projects"} class={activeMenu === 'projects' ? 'active' : ''}>
+                {isMainPage ? "Projects" : "All Projects"}
+            </a>
+            
+            <a href={isMainPage ? "#experience" : "/journey"} class={activeMenu === 'journey' ? 'active' : ''}>
+                {isMainPage ? "Experience" : "All Experience"}
+            </a>
+            
+            <a href={isMainPage ? "#contact" : "/contact"} class={activeMenu === 'contact' ? 'active' : ''}>
+                {isMainPage ? "Contact" : "Get in Touch"}
+            </a>
+        </div>
+
+        <!-- Tombol Minimal Mode -->
+        <a href="/" class="btn-minimal">
+            <i class="fas fa-compress-alt"></i> Minimal Mode
         </a>
     </div>
-
-    <!-- Tombol Minimal Mode -->
-    <a href="/" class="btn-minimal">
-        <i class="fas fa-compress-alt"></i> Minimal Mode
-    </a>
 </nav>
 
 <style>
-    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; gap: 20px;}
+    /* CSS ASLI ANDA UNTUK NAV BASE */
+    nav { 
+        display: flex; justify-content: space-between; align-items: center; 
+        padding: 20px 0; border-bottom: 1px solid var(--border-color); 
+        flex-wrap: wrap; gap: 20px;
+        position: relative; /* Ditambahkan agar dropdown mobile tidak lari */
+    }
     .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text-main); }
     
     .nav-logo-icon { 
-        width: 35px; 
-        height: 35px; 
-        display: flex; 
-        align-items: center; 
-        justify-content: center; 
+        width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; 
         transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
+    .custom-svg { width: 100%; height: 100%; object-fit: contain; }
+    .nav-brand:hover .nav-logo-icon { transform: scale(1.2) rotate(360deg); }
 
-    .custom-svg {
-        width: 100%;
-        height: 100%; 
-        object-fit: contain;
-    }
-
-    .nav-brand:hover .nav-logo-icon {
-        transform: scale(1.2) rotate(360deg);
-    }
-    
-    .nav-brand span { font-family: var(--font-sans); font-weight: 900; font-size: 1.2rem; }
-    
+    /* CSS ASLI ANDA UNTUK LINK */
     .nav-links { display: flex; gap: 30px; align-items: center; }
     .nav-links a { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); text-decoration: none; text-transform: uppercase; font-weight: 600; transition: 0.3s;}
     .nav-links a:hover { color: var(--text-main); }
     .nav-links a.active { color: var(--text-main); border-bottom: 2px solid var(--accent-green); padding-bottom: 5px;}
 
+    /* DEFAULT (DESKTOP) */
+    .mobile-toggle { display: none; }
+    
+    /* TRIK SAKTI: Membatalkan wrapper di Desktop agar layout flexbox kembali seperti asli Anda */
+    @media (min-width: 769px) {
+        .nav-wrapper {
+            display: contents; 
+        }
+    }
+
+    /* === MOBILE VIEW === */
     @media (max-width: 768px) {
-        .nav-links { display: none; }
+        /* Kembalikan space-between jika dibutuhkan */
         nav { justify-content: space-between; }
+        
+        /* Tampilkan Tombol Hamburger */
+        .mobile-toggle { 
+            display: block; background: transparent; border: none; font-size: 24px; 
+            color: var(--text-main); cursor: pointer; z-index: 1001; 
+        }
+        .mobile-toggle i { transition: transform 0.3s ease; }
+        .mobile-toggle.is-active i { transform: rotate(90deg); }
+
+        /* Ubah Wrapper Menjadi Dropdown Menu Melayang */
+        .nav-wrapper {
+            position: absolute;
+            top: 75px; 
+            left: 0; right: 0;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            padding: 25px 20px;
+            gap: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            z-index: 1000;
+            
+            /* Setup Animasi Smooth */
+            opacity: 0; visibility: hidden; transform: translateY(-15px);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Saat menu ditekan */
+        .nav-wrapper.is-open {
+            opacity: 1; visibility: visible; transform: translateY(0);
+        }
+
+        /* Susun isi menu ke bawah */
+        .nav-links { flex-direction: column; width: 100%; gap: 15px; }
+        .nav-links a { width: 100%; text-align: center; padding: 10px 0; border-bottom: 1px solid var(--bg-alt); font-size: 14px;}
+        .nav-links a.active { border-bottom: 2px solid var(--accent-green); color: var(--text-main); }
+        
+        /* Modif khusus tombol minimal di dalam dropdown */
+        :global(.nav-wrapper .btn-minimal) { 
+            width: 100%; justify-content: center; padding: 15px 0 !important; margin-top: 10px;
+        }
     }
 </style>
+
+<script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+        const toggleBtn = document.getElementById('mobile-toggle-btn');
+        const navWrapper = document.getElementById('nav-wrapper');
+        
+        if (toggleBtn && navWrapper) {
+            const icon = toggleBtn.querySelector('i');
+
+            toggleBtn.addEventListener('click', () => {
+                navWrapper.classList.toggle('is-open');
+                toggleBtn.classList.toggle('is-active');
+
+                // Ganti icon
+                if (navWrapper.classList.contains('is-open')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+
+            // Tutup jika layar diklik
+            const links = navWrapper.querySelectorAll('a');
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    if(window.innerWidth <= 768) {
+                        navWrapper.classList.remove('is-open');
+                        toggleBtn.classList.remove('is-active');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+            });
+        }
+    });
+</script>
